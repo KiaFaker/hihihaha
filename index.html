@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20/10/2026</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: radial-gradient(circle at center, #fff0f5 0%, #ffe4e8 50%, #fbcfe8 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        .font-serif-title { font-family: 'Playfair Display', serif; }
+        .font-handwriting { font-family: 'Dancing Script', cursive; }
+
+        /* Canvas background overlay */
+        #water-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: auto;
+        }
+
+        /* Glassmorphism styling */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 20px 40px rgba(244, 63, 94, 0.15);
+        }
+
+        /* Water pool inner ring animation */
+        @keyframes ripple-wave {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 0.4; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        .animate-ripple {
+            animation: ripple-wave 4s infinite ease-in-out;
+        }
+
+        @keyframes floating-flower {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(3deg); }
+        }
+
+        .animate-float {
+            animation: floating-flower 3.5s infinite ease-in-out;
+        }
+
+        /* Custom Scrollbar */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: rgba(244, 63, 94, 0.05);
+            border-radius: 10px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: rgba(244, 63, 94, 0.3);
+            border-radius: 10px;
+        }
+        /* Elegant hero title */
+.hero-title {
+    text-align: center;
+    padding: 0.2em 0.3em;
+    filter: drop-shadow(0 6px 14px rgba(244, 63, 94, 0.25));
+}
+
+.hero-title .line-top {
+    display: block;
+    font-family: 'Dancing Script', cursive;
+    font-weight: 700;
+    font-size: clamp(1.75rem, 7vw, 2.5rem);
+    line-height: 1.2;
+    color: #be123c;
+    letter-spacing: 0.02em;
+}
+
+.hero-title .line-date {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(3.5rem, 16vw, 5.5rem);
+    line-height: 1.05;
+    padding: 0 0.15em;
+    background: linear-gradient(135deg, #9f1239 0%, #f43f5e 50%, #ec4899 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.hero-title .ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+    color: #f43f5e;
+    font-size: 0.9rem;
+    
+}
+
+.hero-title .ornament::before,
+.hero-title .ornament::after {
+    content: "";
+    height: 1px;
+    width: 3.5rem;
+    background: linear-gradient(90deg, transparent, #f43f5e, transparent);
+}
+    </style>
+</head>
+<body class="flex flex-col min-h-screen justify-between items-center relative">
+
+    <!-- Interactive Water & Sparkle Canvas -->
+    <canvas id="water-canvas"></canvas>
+
+    <!-- Main Content -->
+    <main class="w-full max-w-xl px-4 my-auto py-6 z-20 flex flex-col items-center text-center space-y-5">
+        
+        <!-- App Title Banner -->
+
+        <div class="hero-title">
+            <span class="line-top">Ngày Phụ Nữ Việt Nam</span>
+            <span class="line-date">20/10</span>
+            <div class="ornament"><b>Ấn vào đi tin tui</b></div>
+        </div>
+
+        <!-- Water Pool Interactive Center Container -->
+        <div class="relative w-72 h-72 sm:w-80 sm:h-80 rounded-full border-4 border-white/80 shadow-2xl flex items-center justify-center overflow-hidden my-2 group">
+            
+            <!-- Water Ripple Effects in Pool -->
+            <div class="absolute inset-0 bg-gradient-to-br from-rose-200/40 via-pink-300/30 to-rose-400/50 rounded-full animate-ripple"></div>
+            <div class="absolute w-56 h-56 rounded-full border border-white/60 animate-ping opacity-20"></div>
+
+            <!-- Main Lotus Flower Trigger Button -->
+            <button id="draw-wish-btn" class="relative z-10 flex flex-col items-center justify-center transition-transform transform active:scale-95 hover:scale-105 outline-none cursor-pointer">
+                <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-white/90 shadow-xl flex items-center justify-center border-2 border-rose-200 animate-float">
+                    <span class="text-5xl sm:text-6xl drop-shadow-md">🌸</span>
+                </div>
+                <div class="mt-4 bg-white/90 hover:bg-white text-rose-600 font-bold px-5 py-2 rounded-full shadow-lg border border-rose-200 text-xs sm:text-sm flex items-center space-x-2 transition-all">
+                    <i class="fas fa-hand-pointer text-rose-500 animate-bounce"></i>
+                    <span>Làm tí xác suất</span>
+                </div>
+            </button>
+
+            
+        </div>
+
+    </main>
+
+    <!-- Wish Display Popup Modal -->
+    <div id="wish-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div id="wish-modal-card" class="glass-card rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl transform scale-90 transition-all duration-300 relative text-center border-2 border-white space-y-5">
+            
+            <!-- Top Floating Flower Icon -->
+            <div class="w-16 h-16 bg-gradient-to-tr from-rose-400 to-pink-300 rounded-full flex items-center justify-center text-3xl shadow-lg mx-auto -mt-12 border-2 border-white">
+                🌸
+            </div>
+
+            <div>
+                <span id="modal-wish-recipient" class="text-xs font-bold uppercase tracking-wider text-rose-500">
+                    Lời Chúc Tự Hồ Ước Nguyện
+                </span>
+                <h2 id="modal-wish-title" class="text-xl sm:text-2xl font-bold font-serif-title text-gray-800 mt-1">
+                    20/10 vui vẻ nhaaaa
+                </h2>
+            </div>
+
+            <!-- Scrollable Wish Text Card -->
+            <div class="bg-white/90 border border-rose-100 rounded-2xl p-5 text-gray-700 text-sm sm:text-base leading-relaxed max-h-56 overflow-y-auto custom-scroll shadow-inner">
+                <p id="modal-wish-text" class="font-medium text-gray-800 text-base sm:text-lg leading-relaxed">
+                    "Chúc bạn một ngày 20/10 ngập tràn nụ cười, luôn tự tin, xinh đẹp và tỏa sáng theo cách riêng của mình!"
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center justify-center pt-1">
+                <button id="draw-again-btn" class="w-1/2 bg-rose-100 hover:bg-rose-200 text-rose-700 font-semibold py-2.5 rounded-xl transition-all text-xs sm:text-sm flex items-center justify-center space-x-1">
+                    <i class="fas fa-rotate-right"></i>
+                    <span>Lại nè</span>
+                </button>
+            </div>
+
+            <!-- Modal Close Button -->
+            <button id="close-wish-modal" class="absolute top-3 right-4 text-gray-400 hover:text-gray-600 text-lg p-1">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-4 text-xs text-rose-700 font-medium z-20">
+        <p>from BK with love ❤️</p>
+    </footer>
+
+    <!-- Ambient Audio Track -->
+    <audio id="bg-audio" loop preload="auto">
+        <source src="https://github.com/KiaFaker/hihihaha/blob/main/1019.MP3">
+    </audio>
+
+    <script>
+        // Preset Wishes Data Pool
+        const defaultWishes = [
+            { text: "Chúc cậu luôn xinh đẹp, rạng rỡ, luôn tìm thấy được niềm vui và thành công trên con đường mình chọn! Đạp đổ lũ ngu, bước qua đầu lũ khốn 🫦" },
+            { text: "Chúc cậu tìm được hạnh phúc, tìm được người thương mình và yêu mình như công chúa nhá. Côngggggggg chúaaaaaaaaaaaaa " },
+            { text: "Chúc cậu lúc nào cũng yêu đời, nụ cười thì hồn nhiên còn việt kim thì rủng rỉnh =)) " },
+            { text: "Cảm ơn cậu vì chúng mình đã gặp nhau, vì đã là một phần của tổ 1 bẻ đôi. Hãy giữ được sự xinh đẹp, tự tin, và năng lượng tỏa nắng như ngày ấy nhé " },
+            { text: "Cậu luôn là phiên bản đẹp và tuyệt vời nhất của mình. Cứ tự tin và tỏa sáng theo cách riêng của mình nhé! Slayyyyy 💄💄🫦🫦" },
+            { text: "Mong rằng thế giới này sẽ dịu dàng và ngọt ngào với cậu. Chúc cậu ngày 20/10 thật đẹp và tràn đầy hạnh phúc!" },
+            { text: "Cuộc đời như sự nghiệp của Faker vậy, lúc thắng bọn nó chửi hack, lúc thua bọn nó chửi ngu. Đăng quang thì bọn nó vẫn ớt. Vậy nên, hãy cứ giữ vững phong cách, lập trường, đặc biệt là giữ vững chính mình nhé. Tui tin cậu. Kệ bọn nó đi. Haters always gonna hate!!" },
+            { text: "Chúc cậu 20/10 nổ đùng đùng như kim jong un, rực rỡ và tươi sáng như meo meo của Jack!!!!" }
+        ];
+
+        let wishPool = [...defaultWishes];
+        let currentWishIndex = -1;
+
+        // DOM Elements
+        const waterCanvas = document.getElementById('water-canvas');
+        const drawWishBtn = document.getElementById('draw-wish-btn');
+        const wishModal = document.getElementById('wish-modal');
+        const wishModalCard = document.getElementById('wish-modal-card');
+        const modalWishRecipient = document.getElementById('modal-wish-recipient');
+        
+        const modalWishText = document.getElementById('modal-wish-text');
+        const closeWishModal = document.getElementById('close-wish-modal');
+        const drawAgainBtn = document.getElementById('draw-again-btn');
+
+        const bgAudio = document.getElementById('bg-audio');
+        let isAudioPlaying = false;
+
+        window.addEventListener('DOMContentLoaded', initWaterCanvas);
+
+        function getRandomWishIndex() {
+            if (wishPool.length === 0) return 0;
+            let idx;
+            do {
+                idx = Math.floor(Math.random() * wishPool.length);
+            } while (idx === currentWishIndex && wishPool.length > 1);
+            return idx;
+        }
+
+        function displayWish(index) {
+            currentWishIndex = index;
+            const wish = wishPool[index];
+
+            modalWishRecipient.textContent = "Bùm";
+            modalWishText.textContent = `"${wish.text}"`;
+
+            wishModal.classList.remove('pointer-events-none', 'opacity-0');
+            wishModal.classList.add('opacity-100');
+            wishModalCard.classList.remove('scale-90');
+            wishModalCard.classList.add('scale-100');
+
+            triggerSparkles();
+
+            startAudio();
+        }
+
+        drawWishBtn.addEventListener('click', () => {
+            displayWish(getRandomWishIndex());
+        });
+
+        drawAgainBtn.addEventListener('click', () => {
+            displayWish(getRandomWishIndex());
+        });
+
+        function hideWishModal() {
+            wishModal.classList.remove('opacity-100');
+            wishModal.classList.add('opacity-0', 'pointer-events-none');
+            wishModalCard.classList.remove('scale-100');
+            wishModalCard.classList.add('scale-90');
+        }
+
+        closeWishModal.addEventListener('click', hideWishModal);
+        wishModal.addEventListener('click', (e) => {
+            if (e.target === wishModal) hideWishModal();
+        });
+
+        // Audio: starts on the first wish draw (browsers need a tap first)
+        function startAudio() {
+            if (isAudioPlaying) return;
+            bgAudio.play().then(() => { isAudioPlaying = true; }).catch(() => {});
+        }
+
+        // Confetti Sparkle Blast
+        function triggerSparkles() {
+            confetti({
+                particleCount: 70,
+                spread: 80,
+                origin: { y: 0.6 },
+                colors: ['#f43f5e', '#ec4899', '#f472b6', '#fde047']
+            });
+        }
+
+        // Interactive Water Ripple & Floating Lotus Background Canvas
+        function initWaterCanvas() {
+            const canvas = waterCanvas;
+            const ctx = canvas.getContext('2d');
+
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            // Floating petals & water bubbles
+            const floatingElements = [];
+            const elementCount = 30;
+
+            for (let i = 0; i < elementCount; i++) {
+                floatingElements.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 10 + 6,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    type: Math.random() > 0.35 ? 'petal' : 'bubble',
+                    color: ['rgba(244, 63, 94, 0.35)', 'rgba(236, 72, 153, 0.3)', 'rgba(251, 113, 133, 0.35)'][Math.floor(Math.random() * 3)]
+                });
+            }
+
+            // Interactive ripples on user touch/click on canvas
+            const ripples = [];
+
+            window.addEventListener('pointerdown', (e) => {
+                ripples.push({
+                    x: e.clientX,
+                    y: e.clientY,
+                    radius: 5,
+                    maxRadius: Math.random() * 40 + 30,
+                    alpha: 0.7
+                });
+            });
+
+            function render() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Draw floating elements
+                floatingElements.forEach(el => {
+                    el.x += el.vx;
+                    el.y += el.vy;
+
+                    if (el.x < 0) el.x = width;
+                    if (el.x > width) el.x = 0;
+                    if (el.y < 0) el.y = height;
+                    if (el.y > height) el.y = 0;
+
+                    ctx.beginPath();
+                    if (el.type === 'bubble') {
+                        ctx.arc(el.x, el.y, el.radius, 0, Math.PI * 2);
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+                        ctx.fill();
+                        ctx.strokeStyle = 'rgba(244, 63, 94, 0.2)';
+                        ctx.stroke();
+                    } else {
+                        ctx.ellipse(el.x, el.y, el.radius, el.radius / 2, Math.PI / 4, 0, Math.PI * 2);
+                        ctx.fillStyle = el.color;
+                        ctx.fill();
+                    }
+                });
+
+                // Draw water ripples
+                for (let i = ripples.length - 1; i >= 0; i--) {
+                    const r = ripples[i];
+                    r.radius += 1.2;
+                    r.alpha -= 0.015;
+
+                    if (r.alpha <= 0 || r.radius >= r.maxRadius) {
+                        ripples.splice(i, 1);
+                        continue;
+                    }
+
+                    ctx.beginPath();
+                    ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+                    ctx.strokeStyle = `rgba(244, 63, 94, ${r.alpha})`;
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+
+                requestAnimationFrame(render);
+            }
+
+            render();
+        }
+    </script>
+</body>
+</html>
